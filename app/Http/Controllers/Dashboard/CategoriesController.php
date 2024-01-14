@@ -128,17 +128,20 @@ class CategoriesController extends Controller
 
         $old_image = $category->image;
 
-        $newcategory = $request->except('image');
+        $data = $request->except('image');
 
-        $newcategory['image'] = $this->uploadImage($request);
+        $new_image = $this->uploadImage($request);
 
+        if ($new_image) {
+            $data['image'] = $new_image;
+        }
 
-        if ($old_image && $category['image']) {
+        if ($old_image && $new_image) {
             Storage::disk('public')->delete($old_image);
         }
 
 
-        $category->update($newcategory);
+        $category->update($data);
 
         return redirect()
             ->back()

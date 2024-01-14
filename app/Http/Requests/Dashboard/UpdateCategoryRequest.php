@@ -22,12 +22,22 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        // in case unique validation
+        $id = $this->route('category');
+
         return [
             'name' => ['required', 'string', 'min:3', 'max:255'],
             'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'mimes:jpeg,png,jpg,gif', 'image', File::image()->max('2mb')],
             'status' => ['required', 'in:active,archived'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'please enter category name',
         ];
     }
 }
