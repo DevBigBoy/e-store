@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Category\CategoryContoller;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Dashboard\Product\ProductController;
 use App\Http\Controllers\Dashboard\Profile\ProfileController;
 
@@ -17,10 +17,11 @@ Route::group([
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::get('/categories/trash', [CategoriesController::class, 'trash'])->name('categories.trash');
-    Route::put('/categories/{category}/restore', [CategoriesController::class, 'restore'])->name('categories.restore');
-    Route::delete('/categories/{category}/force-delete', [CategoriesController::class, 'forceDelete'])->name('categories.forcedelete');
-    Route::resource('/categories', CategoriesController::class);
+    /** Categories Routes */
+    Route::get('/categories/trash', [CategoryContoller::class, 'trash'])->name('categories.trash');
+    Route::put('/categories/{category}/restore', [CategoryContoller::class, 'restore'])->name('categories.restore');
+    Route::delete('/categories/{category}/force-delete', [CategoryContoller::class, 'forceDelete'])->name('categories.forcedelete');
+    Route::resource('/categories', CategoryContoller::class);
 
 
     Route::resource('products', ProductController::class);

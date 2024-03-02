@@ -15,10 +15,11 @@ class Category extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'parent_id',
-        'name',
+        'name_en',
+        'name_ar',
         'slug',
         'description',
+        'parent_id',
         'image',
         'status',
     ];
@@ -31,20 +32,35 @@ class Category extends Model
 
     public function scopeFilter(Builder $builder, $filters)
     {
-
-        $builder->when($filters['name'] ?? false, function ($builder, $value) {
-            $builder->where('name', 'LIKE', "%{$value}%");
+        // Search by English Name
+        $builder->when($filters['name_en'] ?? false, function ($builder, $value) {
+            $builder->where('name_en', 'LIKE', "%{$value}%");
         });
 
+        // Search by Arabic Name
+        $builder->when($filters['name_ar'] ?? false, function ($builder, $value) {
+            $builder->where('name_ar', 'LIKE', "%{$value}%");
+        });
+
+        // Filter by status (active/inactive)
         $builder->when($filters['status'] ?? false, function ($builder, $value) {
             $builder->where('status', '=', $value);
         });
+
+        $builder->when($filters['category'] ?? false, function ($builder, $value) {
+            if (is_array($value)) {
+                $builder->whereIn('parent_id', $value);
+            } else {
+                $builder->where('parent_id', '=', $value);
+            }
+        });
+
+        $builder->orderBy('name_en', 'asc');
     }
 
     public function parent()
     {
-        // return $this->belongsTo(Category::class, 'parent_id')->withDefault('Primary category');
-        return $this->belongsTo(Category::class, 'parent_id')->withDefault(['name' => 'Primary category']);
+        return $this->belongsTo(Category::class, 'parent_id')->withDefault(['name_en' => 'Primary category']);
     }
 
     public function children()
@@ -52,11 +68,6 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-
-    // public function getImageAttribute($value)
-    // {
-    //     return 'storage/' . $value;
-    // }
 
     public function products()
     {
