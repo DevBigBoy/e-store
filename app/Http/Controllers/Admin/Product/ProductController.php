@@ -131,7 +131,10 @@ class ProductController extends Controller
 
     public function trash()
     {
-        $products = Product::onlyTrashed()->paginate(5);
+        $products = Product::onlyTrashed()
+            ->with(['category:id,name_en,name_ar,parent_id', 'store:id,name'])
+            ->latest()
+            ->paginate(5);
         return view('admin.product.trash', compact('products'));
     }
 

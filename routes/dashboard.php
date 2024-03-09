@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\Category\CategoryContoller;
-use App\Http\Controllers\Admin\Product\ProductController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\Profile\ProfileController;
+use App\Http\Controllers\Admin\Product\ProductController;
+use App\Http\Controllers\Admin\Profile\ProfileController;
+use App\Http\Controllers\Admin\Category\CategoryContoller;
 
 /**
  * Categories Routes

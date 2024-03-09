@@ -40,9 +40,12 @@
                     <span>Product</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('dashboard.products.index') }}">All</a></li>
-                    <li><a class="nav-link" href="{{ route('dashboard.products.create') }}">Create</a></li>
-                    <li><a class="nav-link" href="{{ route('dashboard.products.trash') }}">Trash</a></li>
+                    <li class="{{ request()->routeIs('dashboard.products.index') ? 'active' : '' }}"><a
+                            class="nav-link" href="{{ route('dashboard.products.index') }}">All</a></li>
+                    <li class="{{ request()->routeIs('dashboard.products.create') ? 'active' : '' }}"><a
+                            class="nav-link" href="{{ route('dashboard.products.create') }}">Create</a></li>
+                    <li class="{{ request()->routeIs('dashboard.products.trash') ? 'active' : '' }}"><a
+                            class="nav-link" href="{{ route('dashboard.products.trash') }}">Trash</a></li>
                 </ul>
             </li>
             <li class="menu-header">Stisla</li>
