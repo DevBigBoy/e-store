@@ -47,7 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <ol class="breadcrumb float-sm-right">
                                 @section('breadcrumb')
                                     <li class="breadcrumb-item">
-                                        <a href="#">Home</a>
+                                        <a href="{{ route('dashboard') }}">Home</a>
                                     </li>
                                 @show
                             </ol>

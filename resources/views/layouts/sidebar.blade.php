@@ -76,6 +76,15 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('categories.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-wrench"></i>
+                        <p>
+                            Categories
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
