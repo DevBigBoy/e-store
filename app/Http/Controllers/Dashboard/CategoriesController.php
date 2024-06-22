@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Dashboard\StorecategoryRequest;
+use App\Http\Requests\Dashboard\UpdateCategoryRequest;
+use Exception;
 
 class CategoriesController extends Controller
 {
@@ -88,17 +90,46 @@ class CategoriesController extends Controller
      */
     public function edit(string $id)
     {
-        $parents  = $this->category::all();
+
+        // try {
+        //     $category = $this->category::findOrFail($id);
+        // } catch (Exception $e) {
+        //     abort(404);
+        // return redirect()->route('dashboard.categories.index')->with('info','record not found!');
+        // }
+
         $category = $this->category::findOrFail($id);
+
+        // if (!$category) {
+        //     abort(404);
+        // }
+
+        // SELECT * from categories where id <> $id AND (parent_id is null OR parent_id <> $id)
+        // "select * from `categories` where `id` <> ? and (`parent_id` is null or `parent_id` <> ?)"
+        $parents  = $this->category::where('id', '<>', $id)
+            ->where(function ($query) use ($id) {
+                $query->whereNull('parent_id')
+                    ->Orwhere('parent_id', '<>', $id);
+            })
+            ->get();
+
         return view('dashboard.categories.edit', compact('parents', 'category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, string $id)
     {
-        //
+        $newcategory = $request->validated();
+
+        $category = $this->category::findOrFail($id);
+
+        $category->update($newcategory);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Category Updated Successfully!');
     }
 
     /**
@@ -106,6 +137,14 @@ class CategoriesController extends Controller
      */
     public function destroy(string $id)
     {
+        // Method 1
+        // $category = $this->category::findOrFail($id);
+        // $category->delete();
+
+        // Method 2
+        // $this->category::where('id', '=', $id)->delete();
+
+        // Method 3
         $this->category::destroy($id);
 
         return redirect()->back()->with('success', 'Category Deleted Successfully!');

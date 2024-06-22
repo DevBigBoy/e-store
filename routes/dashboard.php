@@ -6,4 +6,11 @@ use App\Http\Controllers\Dashboard\CategoriesController;
 /**
  * Categories Routes
  */
-Route::resource('dashboard/categories', CategoriesController::class)->middleware(['auth', 'verified']);
+
+Route::group([
+    'middlware' => ['auth', 'verified'],
+    'prefix' => 'dashboard',
+    'as' => 'dashboard.'
+], function () {
+    Route::resource('/categories', CategoriesController::class);
+});

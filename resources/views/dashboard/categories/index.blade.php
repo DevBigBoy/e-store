@@ -24,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header text-right">
-                    <a href="{{ route('categories.create') }}" class="btn btn-primary">
+                    <a href="{{ route('dashboard.categories.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         Create New
                     </a>
@@ -33,6 +33,11 @@
                 @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('info'))
+                    <div class="alert alert-info">
+                        {{ session('info') }}
                     </div>
                 @endif
                 @if ($errors->any())
@@ -63,7 +68,7 @@
                                 <tr>
                                     <td>{{ $category->id }}</td>
                                     <td>{{ $category->name }}</td>
-                                    <td>{{ $category->parent_id }}</td>
+                                    <td>{{ $category->parent->name ?? 'Primary category' }}</td>
                                     <td class="text-center">
 
                                         @if ($category->status == 'active')
@@ -79,16 +84,17 @@
                                     <td>{{ $category->slug }}</td>
                                     <td>{{ $category->created_at }}</td>
                                     <td class="d-flex justify-center align-items-center">
-                                        <a href="{{ route('categories.edit', $category->id) }}"
+                                        <a href="{{ route('dashboard.categories.edit', $category->id) }}"
                                             class="btn btn-primary mr-2">
                                             <i class="fas fa-edit"></i>
                                             Edit
                                         </a>
-                                        <form action="{{ route('categories.destroy', $category->id) }}" method="post">
+                                        <form action="{{ route('dashboard.categories.destroy', $category->id) }}"
+                                            method="post">
                                             @csrf
                                             <!-- Form Method Spofing -->
                                             @method('DELETE')
-                                            <a href="{{ route('categories.destroy', $category->id) }}"
+                                            <a href="{{ route('dashboard.categories.destroy', $category->id) }}"
                                                 class="btn btn-danger"
                                                 onclick="event.preventDefault(); this.closest('form').submit();">
                                                 <i class="fas fa-trash-alt"></i>

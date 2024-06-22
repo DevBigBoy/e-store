@@ -8,7 +8,7 @@
 
 @section('breadcrumb')
     <li class="breadcrumb-item">
-        <a href="{{ route('categories.index') }}">Categories</a>
+        <a href="{{ route('dashboard.categories.index') }}">Categories</a>
     </li>
     <li class="breadcrumb-item active">
         create
@@ -21,14 +21,14 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('categories.index') }}" class="btn btn-warning">
+                    <a href="{{ route('dashboard.categories.index') }}" class="btn btn-warning">
                         <i class="fas fa-arrow-left"></i>
                         Back
                     </a>
                 </div>
                 <!-- /.card-header -->
 
-                <form method="POST" action="{{ route('categories.store') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('dashboard.categories.store') }}" enctype="multipart/form-data">
                     @csrf
 
                     @if (session('success'))

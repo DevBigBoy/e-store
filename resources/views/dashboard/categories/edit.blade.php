@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Shozo Store - Category')
+@section('title', 'Shezo Store - Category')
 
 @section('breadcrumb-title', 'Edit Category')
 
@@ -8,7 +8,7 @@
 
 @section('breadcrumb')
     <li class="breadcrumb-item">
-        <a href="{{ route('categories.index') }}">Categories</a>
+        <a href="{{ route('dashboard.categories.index') }}">Categories</a>
     </li>
     <li class="breadcrumb-item active">
         Edit
@@ -21,14 +21,15 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('categories.index') }}" class="btn btn-warning">
+                    <a href="{{ route('dashboard.categories.index') }}" class="btn btn-warning">
                         <i class="fas fa-arrow-left"></i>
                         Back
                     </a>
                 </div>
                 <!-- /.card-header -->
 
-                <form method="POST" action="{{ route('categories.store') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('dashboard.categories.update', $category->id) }}"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -42,7 +43,7 @@
                         <div class="form-group">
                             <label for="name">Category Name</label>
                             <input type="text" class="form-control" id="name" placeholder="Name" name="name"
-                                autofocus value="{{ $category->name }}">
+                                value="{{ $category->name }}">
 
                             @if ($errors->has('name'))
                                 <span class="text-danger">{{ $errors->first('name') }}</span>
@@ -66,10 +67,9 @@
                                 <div class="form-group">
                                     <label>status</label>
                                     <select class="form-control" name="status">
-                                        <option value="">Status</option>
-                                        <option value="1" @selected($category->status == 'active')>Active
+                                        <option value="active" @selected($category->status == 'active')>Active
                                         </option>
-                                        <option value="0" @selected($category->status == '')>Inactive</option>
+                                        <option value="archived" @selected($category->status == 'archived')>Archived</option>
                                     </select>
 
                                     @if ($errors->has('status'))
@@ -85,7 +85,7 @@
                                     <select class="form-control" name="parent_id">
                                         <option value="">Primary Category</option>
                                         @foreach ($parents as $parent)
-                                            <option value="{{ $parent->id }}" @selected($category->id == $parent->id)>
+                                            <option value="{{ $parent->id }}" @selected($category->parent_id == $parent->id)>
                                                 {{ $parent->name }}</option>
                                         @endforeach
                                     </select>
