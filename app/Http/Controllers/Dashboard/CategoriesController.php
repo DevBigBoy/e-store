@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Dashboard\StorecategoryRequest;
 use App\Http\Requests\Dashboard\UpdateCategoryRequest;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 
 class CategoriesController extends Controller
 {
@@ -59,7 +60,9 @@ class CategoriesController extends Controller
          */
 
         //  Validation data
-        $category = $request->validated();
+        $category = $request->except('image');
+
+        $category['image'] = $this->uploadImage($request);
 
         /**
          * Request Merge
@@ -121,9 +124,19 @@ class CategoriesController extends Controller
      */
     public function update(UpdateCategoryRequest $request, string $id)
     {
-        $newcategory = $request->validated();
-
         $category = $this->category::findOrFail($id);
+
+        $old_image = $category->image;
+
+        $newcategory = $request->except('image');
+
+        $newcategory['image'] = $this->uploadImage($request);
+
+
+        if ($old_image && $category['image']) {
+            Storage::disk('public')->delete($old_image);
+        }
+
 
         $category->update($newcategory);
 
@@ -145,8 +158,45 @@ class CategoriesController extends Controller
         // $this->category::where('id', '=', $id)->delete();
 
         // Method 3
-        $this->category::destroy($id);
+        // $this->category::destroy($id);
 
-        return redirect()->back()->with('success', 'Category Deleted Successfully!');
+        $category = $this->category::findOrFail($id);
+
+        $category->delete();
+
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'Category Deleted Successfully!');
+    }
+
+    protected function uploadImage(Request $request)
+    {
+        if (!$request->hasFile('image')) {
+            return;
+        }
+
+        if ($request->hasFile('image')) {
+            $file  = $request->file('image'); // return object UploadedFile
+
+            /**
+             * ====================================
+             *      Some Avalible Method
+             * ====================================
+             * $file->getClientMimeType(); image/png
+             * $file->getClientOriginalName();
+             * $file->getClientOriginalExtension();
+             * $file->getSize();
+             */
+
+            $path  = $file->store('uploads', [
+                'disk' => 'public'
+            ]);
+
+            return $path;
+        }
     }
 }

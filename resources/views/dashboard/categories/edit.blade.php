@@ -108,6 +108,11 @@
                                     <span class="input-group-text">Upload</span>
                                 </div>
                             </div>
+
+                            @if ($category->image)
+                                <img src="{{ asset('storage/' . $category->image) }}" height="70px" alt="">
+                            @endif
+
                             @if ($errors->has('image'))
                                 <span class="text-danger">{{ $errors->first('image') }}</span>
                             @endif
