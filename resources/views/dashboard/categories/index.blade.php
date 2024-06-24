@@ -69,7 +69,11 @@
                                 <tr>
                                     <td>{{ $category->id }}</td>
                                     <td>
-                                        <img src="{{ asset('storage/' . $category->image) }}" height="60px" alt="">
+
+                                        @if ($category->image)
+                                            <img src="{{ asset('storage/' . $category->image) }}" height="60px"
+                                                alt="">
+                                        @endif
                                     </td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->parent->name ?? 'Primary category' }}</td>
@@ -109,7 +113,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">
+                                    <td colspan="8" class="text-center">
                                         No categories defined.
                                     </td>
                                 </tr>

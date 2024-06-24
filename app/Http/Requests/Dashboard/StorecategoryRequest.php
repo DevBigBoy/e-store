@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Dashboard;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
 class StorecategoryRequest extends FormRequest
 {
@@ -22,10 +23,10 @@ class StorecategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'parent_id' => ['nullable', 'integer'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'min:3', 'max:255'],
+            'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
             'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'mimes:jpeg,png,jpg,gif', 'image', 'max:2048'],
+            'image' => ['nullable', 'mimes:jpeg,png,jpg,gif', 'image', File::image()->max('2mb')],
             'status' => ['required', 'in:active,archived'],
         ];
     }

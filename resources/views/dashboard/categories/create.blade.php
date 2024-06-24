@@ -40,12 +40,16 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name">Category Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Name" name="name"
-                                autofocus value="{{ old('name') }}">
+                            <input type="text" id="name" @class(['form-control', 'is-invalid' => $errors->has('name')]) placeholder="Name"
+                                name="name" autofocus value="{{ old('name') }}">
 
-                            @if ($errors->has('name'))
+                            {{-- @if ($errors->has('name'))
                                 <span class="text-danger">{{ $errors->first('name') }}</span>
-                            @endif
+                            @endif --}}
+
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
@@ -54,9 +58,13 @@
                                 {{ old('description') }}
                             </textarea>
 
-                            @if ($errors->has('description'))
+                            {{-- @if ($errors->has('description'))
                                 <span class="text-danger">{{ $errors->first('description') }}</span>
-                            @endif
+                            @endif --}}
+
+                            @error('description')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="row">

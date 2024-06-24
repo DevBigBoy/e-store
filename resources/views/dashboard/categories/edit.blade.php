@@ -42,12 +42,12 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name">Category Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Name" name="name"
-                                value="{{ $category->name }}">
+                            <input type="text" @class(['form-control', 'is-invalid' => $errors->has('name')]) id="name" placeholder="Name"
+                                name="name" value="{{ $category->name }}">
 
-                            @if ($errors->has('name'))
-                                <span class="text-danger">{{ $errors->first('name') }}</span>
-                            @endif
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
