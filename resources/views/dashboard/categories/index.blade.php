@@ -30,26 +30,32 @@
                     </a>
                 </div>
                 <!-- /.card-header -->
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if (session('info'))
-                    <div class="alert alert-info">
-                        {{ session('info') }}
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <x-alert type="success" />
+                <x-alert type="info" />
+
                 <div class="card-body">
+
+
+                    <form action="{{ URL::current() }}" method="get" class="">
+                        <div class="row d-flex justify-content-between align-items-baseline mb-4">
+
+                            <input class="form-control col-5" type="text" placeholder="Search" name="name"
+                                value="{{ request('name') }}">
+
+                            <div class="form-group col-4">
+                                <select class="form-control" name="status">
+                                    <option value="">All</option>
+                                    <option value="active" @seleted(request('status') == 'active')>Active</option>
+                                    <option value="archived" @seleted(request('status') == 'archived')>Archived</option>
+                                </select>
+
+                            </div>
+
+                            <button class="btn btn-dark col-2" type="submit">Search</button>
+                        </div>
+                    </form>
+
+
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -69,16 +75,13 @@
                                 <tr>
                                     <td>{{ $category->id }}</td>
                                     <td>
-
                                         @if ($category->image)
-                                            <img src="{{ asset('storage/' . $category->image) }}" height="60px"
-                                                alt="">
+                                            <img src="{{ asset($category->image) }}" height="60px" alt="">
                                         @endif
                                     </td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->parent->name ?? 'Primary category' }}</td>
                                     <td class="text-center">
-
                                         @if ($category->status == 'active')
                                             <span class="badge badge-success" style="font-size: 100%">
                                                 {{ $category->status }}
@@ -120,6 +123,10 @@
                             @endforelse
                         </tbody>
                     </table>
+
+                    {{ $categories->withQueryString()->links() }}
+
+
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -151,7 +158,9 @@
             $("#example1").DataTable({
                 "responsive": true,
                 "lengthChange": false,
+                "searching": false,
                 "autoWidth": false,
+                "paging": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 

@@ -3,11 +3,20 @@
 namespace App\Observers;
 
 use App\Models\Category;
+use Illuminate\Support\Str;
 use App\Mail\DeleteCategory;
 use Illuminate\Support\Facades\Mail;
 
 class CategoryObserver
 {
+
+    public function creating(Category $category)
+    {
+        if (empty($category->slug)) {
+            // Generate a slug from the category's name
+            $category->slug = Str::slug($category->name);
+        }
+    }
     /**
      * Handle the Category "created" event.
      */
@@ -31,7 +40,7 @@ class CategoryObserver
     {
         // all the logic insside this method will exceute after the deletion process
 
-        Mail::to('sara@gmail.com')->send(new DeleteCategory($category));
+        // Mail::to('sara@gmail.com')->send(new DeleteCategory($category));
     }
 
     /**

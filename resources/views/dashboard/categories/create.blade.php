@@ -31,25 +31,14 @@
                 <form method="POST" action="{{ route('dashboard.categories.store') }}" enctype="multipart/form-data">
                     @csrf
 
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                    {{-- <x-input-error /> --}}
 
+                    <x-alert type="success" />
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name">Category Name</label>
-                            <input type="text" id="name" @class(['form-control', 'is-invalid' => $errors->has('name')]) placeholder="Name"
-                                name="name" autofocus value="{{ old('name') }}">
 
-                            {{-- @if ($errors->has('name'))
-                                <span class="text-danger">{{ $errors->first('name') }}</span>
-                            @endif --}}
-
-                            @error('name')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <x-form.input type="text" name="name" />
                         </div>
 
                         <div class="form-group">

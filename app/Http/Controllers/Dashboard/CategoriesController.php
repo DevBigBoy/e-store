@@ -17,22 +17,34 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoriesController extends Controller
 {
-    protected $category;
+    // protected $category;
     /**
      * Constructor with dependency injection (optional)
      */
-    public function __construct(Category $category)
-    {
-        $this->category = $category;
+    public function __construct(
+        public Category $category
+    ) {
+        // $this->category = $category;
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query =  $this->category::query();
+
+        if ($name = $request->query('name')) {
+            $query->where('name', 'LIKE', "%{$name}%");
+        }
+
+        if ($status = $request->query('status')) {
+            $query->where('status', '=', $status);
+        }
+
         //  This return collection of 'objects' class not an array
-        $categories = $this->category::all();
+        $categories = $query->paginate(3);
+        // $categories = $this->category::all();
         return view('dashboard.categories.index', compact('categories'));
     }
 
@@ -74,7 +86,7 @@ class CategoriesController extends Controller
         //     'slug' => Str::slug(),
         // ]);
 
-        $category['slug'] = Str::slug($category['name']);
+        // $category['slug'] = Str::slug($category['name']);
 
         // Insert data into table
         $this->category::create($category);
@@ -125,9 +137,10 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $id)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $category = $this->category::findOrFail($id);
+        // dd($category->image);
+        // $category = $this->category::findOrFail($id);
 
         $old_image = $category->image;
 
@@ -146,8 +159,7 @@ class CategoriesController extends Controller
 
         $category->update($data);
 
-        return redirect()
-            ->back()
+        return to_route('dashboard.categories.index')
             ->with('success', 'Category Updated Successfully!');
     }
 

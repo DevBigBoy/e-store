@@ -31,4 +31,10 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+
+    public function getImageAttribute($value)
+    {
+        return 'storage/' . $value;
+    }
 }

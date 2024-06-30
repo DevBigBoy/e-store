@@ -33,21 +33,13 @@
                     @csrf
                     @method('PUT')
 
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                    <x-alert type="success" />
 
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name">Category Name</label>
-                            <input type="text" @class(['form-control', 'is-invalid' => $errors->has('name')]) id="name" placeholder="Name"
-                                name="name" value="{{ $category->name }}">
 
-                            @error('name')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <x-form.input type="text" name="name" :value="$category->name" />
                         </div>
 
                         <div class="form-group">
@@ -110,7 +102,7 @@
                             </div>
 
                             @if ($category->image)
-                                <img src="{{ asset('storage/' . $category->image) }}" height="70px" alt="">
+                                <img src="{{ asset($category->image) }}" height="70px" alt="">
                             @endif
 
                             @if ($errors->has('image'))

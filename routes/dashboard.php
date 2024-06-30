@@ -8,7 +8,7 @@ use App\Http\Controllers\Dashboard\CategoriesController;
  */
 
 Route::group([
-    'middlware' => ['auth', 'verified'],
+    'middleware' => ['auth'],
     'prefix' => 'dashboard',
     'as' => 'dashboard.'
 ], function () {
