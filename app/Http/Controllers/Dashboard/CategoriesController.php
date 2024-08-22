@@ -9,7 +9,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Dashboard\StorecategoryRequest;
 use App\Http\Requests\Dashboard\UpdateCategoryRequest;
+use App\Mail\DeleteCategory;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class CategoriesController extends Controller
@@ -122,7 +125,7 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, string $id)
+    public function update(UpdateCategoryRequest $request, Category $id)
     {
         $category = $this->category::findOrFail($id);
 
@@ -151,7 +154,7 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
         // Method 1
         // $category = $this->category::findOrFail($id);
@@ -163,9 +166,21 @@ class CategoriesController extends Controller
         // Method 3
         // $this->category::destroy($id);
 
-        $category = $this->category::findOrFail($id);
+        /**
+         * new way of deleting
+         */
 
-        $category->delete();
+        DB::beginTransaction();
+        try {
+            $category->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+
+        // $category = $this->category::findOrFail($id);
+
+        // $category->delete();
 
         if ($category->image) {
             Storage::disk('public')->delete($category->image);
