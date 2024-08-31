@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
-@section('title', 'Shozo Store - Category')
+@section('title', 'Shozo Store - Trashed Category')
 
-@section('breadcrumb-title', 'All Categories')
+@section('breadcrumb-title', 'Trashed Categories')
 
 @push('styles')
     <!-- DataTables -->
@@ -14,7 +14,7 @@
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item active">
-        Categories
+        Trashed Categories
     </li>
 @endsection
 
@@ -28,10 +28,9 @@
                         <i class="fas fa-plus"></i>
                         Create New
                     </a>
-                    <a href="{{ route('dashboard.categories.trash') }}" class="btn btn-danger">
-                        <i class="fas fa-trash-alt"></i>
-
-                        Trashed Categories
+                    <a href="{{ route('dashboard.categories.index') }}" class="btn btn-warning">
+                        <i class="fas fa-plus"></i>
+                        ALL Categories
                     </a>
                 </div>
                 <!-- /.card-header -->
@@ -70,7 +69,7 @@
                                 <th>Parent(s)</th>
                                 <th>status</th>
                                 <th>slug</th>
-                                <th>Created At</th>
+                                <th>Deleted At</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -98,23 +97,31 @@
                                         @endif
                                     </td>
                                     <td>{{ $category->slug }}</td>
-                                    <td>{{ $category->created_at }}</td>
+                                    <td>{{ $category->deleted_at }}</td>
                                     <td class="d-flex justify-center align-items-center">
-                                        <a href="{{ route('dashboard.categories.edit', $category->id) }}"
-                                            class="btn btn-primary mr-2">
-                                            <i class="fas fa-edit"></i>
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('dashboard.categories.destroy', $category->id) }}"
+
+                                        <form action="{{ route('dashboard.categories.restore', $category->id) }}"
+                                            method="post" class="mr-2">
+                                            @csrf
+                                            @method('PUT')
+                                            <!-- Form Method Spofing -->
+                                            <a href="{{ route('dashboard.categories.restore', $category->id) }}"
+                                                class="btn btn-primary"
+                                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                                <i class="fas fa-trash-restore-alt"></i> Restore
+                                            </a>
+                                        </form>
+
+                                        <form action="{{ route('dashboard.categories.forcedelete', $category->id) }}"
                                             method="post">
                                             @csrf
                                             <!-- Form Method Spofing -->
                                             @method('DELETE')
-                                            <a href="{{ route('dashboard.categories.destroy', $category->id) }}"
+                                            <a href="{{ route('dashboard.categories.forcedelete', $category->id) }}"
                                                 class="btn btn-danger"
                                                 onclick="event.preventDefault(); this.closest('form').submit();">
                                                 <i class="fas fa-trash-alt"></i>
-                                                Delete
+                                                ForceDelete
                                             </a>
                                         </form>
                                     </td>
