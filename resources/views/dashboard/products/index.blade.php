@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
-@section('title', 'Shozo Store - Trashed Category')
+@section('title', 'Products')
 
-@section('breadcrumb-title', 'Trashed Categories')
+@section('breadcrumb-title', 'All Products')
 
 @push('styles')
     <!-- DataTables -->
@@ -14,7 +14,7 @@
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item active">
-        Trashed Categories
+        Products
     </li>
 @endsection
 
@@ -24,14 +24,17 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header text-right">
-                    <a href="{{ route('dashboard.categories.create') }}" class="btn btn-primary">
+                    <a href="{{ route('dashboard.products.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         Create New
                     </a>
-                    <a href="{{ route('dashboard.categories.index') }}" class="btn btn-warning">
-                        <i class="fab fa-google-wallet"></i>
-                        ALL Categories
-                    </a>
+
+                    @if (Route::has('dashboard.products.trash'))
+                        <a href="{{ route('dashboard.products.trash') }}" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i>
+                            Trashed Categories
+                        </a>
+                    @endif
                 </div>
                 <!-- /.card-header -->
                 <x-alert type="success" />
@@ -64,79 +67,81 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Image</th>
+                                <th>image</th>
                                 <th>Name</th>
-                                <th>Parent(s)</th>
+                                <th>Category</th>
+                                <th>Store</th>
+                                <th>price</th>
+                                <th>compare_price</th>
                                 <th>status</th>
-                                <th>slug</th>
-                                <th>Deleted At</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            @forelse ($categories as $category)
+                            @forelse ($products as $product)
                                 <tr>
-                                    <td>{{ $category->id }}</td>
+                                    <td>{{ $product->id }}</td>
+
                                     <td>
-                                        @if ($category->image)
-                                            <img src="{{ asset($category->image) }}" height="60px" alt="">
+                                        @if ($product->image)
+                                            <img src="{{ asset($product->image) }}" height="60px" alt="">
                                         @endif
                                     </td>
-                                    <td>{{ $category->name }}</td>
-                                    <td>{{ $category->parent->name ?? 'Primary category' }}</td>
+
+                                    <td>{{ $product->name }}</td>
+
+                                    <td>{{ $product->category->name }}</td>
+
+                                    <td>{{ $product->store->name }}</td>
+
+                                    <td>{{ $product->price }}</td>
+
+                                    <td>{{ $product->compare_price }}</td>
+
                                     <td class="text-center">
-                                        @if ($category->status == 'active')
+                                        @if ($product->status == 'active')
                                             <span class="badge badge-success" style="font-size: 100%">
-                                                {{ $category->status }}
+                                                {{ $product->status }}
                                             </span>
                                         @else
                                             <span class="badge badge-danger" style="font-size: 100%">
-                                                {{ $category->status }}
+                                                {{ $product->status }}
                                             </span>
                                         @endif
                                     </td>
-                                    <td>{{ $category->slug }}</td>
-                                    <td>{{ $category->deleted_at }}</td>
+
                                     <td class="d-flex justify-center align-items-center">
-
-                                        <form action="{{ route('dashboard.categories.restore', $category->id) }}"
-                                            method="post" class="mr-2">
-                                            @csrf
-                                            @method('PUT')
-                                            <!-- Form Method Spofing -->
-                                            <a href="{{ route('dashboard.categories.restore', $category->id) }}"
-                                                class="btn btn-primary"
-                                                onclick="event.preventDefault(); this.closest('form').submit();">
-                                                <i class="fas fa-trash-restore-alt"></i> Restore
-                                            </a>
-                                        </form>
-
-                                        <form action="{{ route('dashboard.categories.forcedelete', $category->id) }}"
+                                        <a href="{{ route('dashboard.products.edit', $product->id) }}"
+                                            class="btn btn-primary mr-2">
+                                            <i class="fas fa-edit"></i>
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('dashboard.products.destroy', $product->id) }}"
                                             method="post">
                                             @csrf
                                             <!-- Form Method Spofing -->
                                             @method('DELETE')
-                                            <a href="{{ route('dashboard.categories.forcedelete', $category->id) }}"
+                                            <a href="{{ route('dashboard.products.destroy', $product->id) }}"
                                                 class="btn btn-danger"
                                                 onclick="event.preventDefault(); this.closest('form').submit();">
                                                 <i class="fas fa-trash-alt"></i>
-                                                ForceDelete
+                                                Delete
                                             </a>
                                         </form>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center">
-                                        No categories defined.
+                                    <td colspan="9" class="text-center">
+                                        No Products defined.
                                     </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
 
-                    {{ $categories->withQueryString()->links() }}
+                    {{ $products->withQueryString()->links() }}
 
 
                 </div>

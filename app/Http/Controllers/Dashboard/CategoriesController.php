@@ -33,7 +33,7 @@ class CategoriesController extends Controller
     public function index(Request $request)
     {
         // $query =  $this->category::query();
-
+        // dd(Category::pluck('id')->toArray());
         //  This return collection of 'objects' class not an array
         $categories = $this->category::filter($request->query())
             ->latest('id')
