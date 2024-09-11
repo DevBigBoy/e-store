@@ -43,7 +43,8 @@ class Category extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        // return $this->belongsTo(Category::class, 'parent_id')->withDefault('Primary category');
+        return $this->belongsTo(Category::class, 'parent_id')->withDefault(['name' => 'Primary category']);
     }
 
     public function children()
@@ -52,8 +53,13 @@ class Category extends Model
     }
 
 
-    public function getImageAttribute($value)
+    // public function getImageAttribute($value)
+    // {
+    //     return 'storage/' . $value;
+    // }
+
+    public function products()
     {
-        return 'storage/' . $value;
+        return $this->hasMany(Product::class);
     }
 }

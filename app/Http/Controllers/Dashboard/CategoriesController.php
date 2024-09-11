@@ -6,13 +6,10 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Dashboard\StorecategoryRequest;
 use App\Http\Requests\Dashboard\UpdateCategoryRequest;
-use App\Mail\DeleteCategory;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class CategoriesController extends Controller
@@ -36,11 +33,15 @@ class CategoriesController extends Controller
         // dd(Category::pluck('id')->toArray());
         //  This return collection of 'objects' class not an array
         $categories = $this->category::filter($request->query())
+            ->withCount(['products as products_count' => function ($query) {
+                $query->where('status', 'active');
+            }])
+            ->with('parent')
             ->latest('id')
-            ->paginate(3);
+            ->paginate();
         // $categories = $this->category::all();
         // $categories = Category::status('archived')->paginate();
-
+        // dd($categories);
         return view('dashboard.categories.index', compact('categories'));
     }
 
@@ -89,6 +90,16 @@ class CategoriesController extends Controller
 
         // PRG it's a redirect process
         return redirect()->back()->with('success', 'Category created successfully!');
+    }
+
+    public function show(Category $category)
+    {
+
+        dd($category->products()
+            ->with('store:id,name')
+            ->where('status', 'active')
+            ->latest()
+            ->get());
     }
 
 

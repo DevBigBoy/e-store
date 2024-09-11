@@ -41,10 +41,16 @@ class ProductController extends Controller
          */
         // $products = Product::withoutGlobalScope('store')->paginate(5);
 
-        $products = Product::paginate(5);
         // $products = Product::withoutGlobalScope(StoreScope::class)->paginate(5);
 
         // 5. Return the 'dashboard.products.index' view with the products data.
+
+        /**
+         * SELECT * from Products
+         * SELECT * FROM categories WHERE id IN(.....)
+         * SELECT * FROM stores WHERE id IN(........)
+         */
+        $products = Product::with(['category:id,name', 'store:id,name'])->paginate();
         return view('dashboard.products.index', compact('products'));
     }
 

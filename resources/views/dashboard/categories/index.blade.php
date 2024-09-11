@@ -70,7 +70,7 @@
                                 <th>Parent(s)</th>
                                 <th>status</th>
                                 <th>slug</th>
-                                <th>Created At</th>
+                                <th>H.M Products</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -84,8 +84,14 @@
                                             <img src="{{ asset($category->image) }}" height="60px" alt="">
                                         @endif
                                     </td>
-                                    <td>{{ $category->name }}</td>
-                                    <td>{{ $category->parent->name ?? 'Primary category' }}</td>
+
+                                    <td>
+                                        <a href="{{ route('dashboard.categories.show', $category->id) }}" class="">
+                                            {{ $category->name }}
+                                        </a>
+                                    </td>
+
+                                    <td>{{ $category->parent->name }}</td>
                                     <td class="text-center">
                                         @if ($category->status == 'active')
                                             <span class="badge badge-success" style="font-size: 100%">
@@ -98,7 +104,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $category->slug }}</td>
-                                    <td>{{ $category->created_at }}</td>
+                                    <td>{{ $category->products_count }}</td>
                                     <td class="d-flex justify-center align-items-center">
                                         <a href="{{ route('dashboard.categories.edit', $category->id) }}"
                                             class="btn btn-primary mr-2">

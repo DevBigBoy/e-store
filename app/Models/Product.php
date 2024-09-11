@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'store_id',
         'category_id',
@@ -38,6 +39,8 @@ class Product extends Model
     {
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
+
+
 
     protected static function booted()
     {
