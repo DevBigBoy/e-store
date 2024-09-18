@@ -93,14 +93,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('dashboard.products.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-wrench"></i>
-                        <p>
-                            Products
-                        </p>
-                    </a>
-                </li>
+
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

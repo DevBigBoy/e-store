@@ -30,6 +30,10 @@ class Product extends Model
         'status',
     ];
 
+    protected $casts = [
+        'options' => 'json',  // Cast options to JSON
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
@@ -40,6 +44,18 @@ class Product extends Model
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
 
+
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,       // Related model
+            'product_tag',     // Pivot Table Name
+            'product_id',       // FK in Pivot Table for the current model
+            'tage_id',          // Fk in pivot Table for the related model
+            'id',               // PK for current model
+            'id',               // PK for Related model
+        );
+    }
 
 
     protected static function booted()

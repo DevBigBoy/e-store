@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\Product;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Scopes\StoreScope;
 use App\Models\Store;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\Product\ProductStoreRequest;
+use App\Http\Requests\Dashboard\Product\ProductUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -50,6 +51,7 @@ class ProductController extends Controller
          * SELECT * FROM categories WHERE id IN(.....)
          * SELECT * FROM stores WHERE id IN(........)
          */
+
         $products = Product::with(['category:id,name', 'store:id,name'])->paginate();
         return view('dashboard.products.index', compact('products'));
     }
@@ -61,14 +63,14 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::whereNull('parent_id')->with('children')->get();
-        $stores = Store::all();
-        return view('dashboard.products.create', compact('categories', 'stores'));
+        // $stores = Store::all();
+        return view('dashboard.products.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(ProductStoreRequest $request) {}
 
     /**
      * Display the specified resource.
@@ -93,7 +95,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
         $user = Auth::user();
 

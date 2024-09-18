@@ -91,7 +91,7 @@
 
                                     <td>{{ $product->name }}</td>
                                     <!-- SELECT * cateories WHERE id = $product->category_id This query will run for every row -->
-                                    <td>{{ $product->category->name }}</td>
+                                    <td>{{ $product->category->name ?? 'NA' }}</td>
                                     <!-- bed for performance -->
                                     <!-- SELECT * Stores WHERE id = $product->store_id This query will run for every row this is called N+1 problem -->
                                     <td>{{ $product->store->name }}</td>

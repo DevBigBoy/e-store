@@ -4,8 +4,6 @@
 
 @section('breadcrumb-title', 'Create Product')
 
-
-
 @section('breadcrumb')
     <li class="breadcrumb-item">
         <a href="{{ route('dashboard.products.index') }}">Products</a>
@@ -127,22 +125,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-6">
-                                <!-- select -->
-                                <div class="form-group">
-                                    <label>Store</label>
-                                    <select class="form-control" name="store_id">
-                                        <option value="">Choose Store</option>
-                                        @foreach ($stores as $store)
-                                            <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                        @endforeach
-                                    </select>
 
-                                    @if ($errors->has('store_id'))
-                                        <span class="text-danger">{{ $errors->first('parent_id') }}</span>
-                                    @endif
-                                </div>
-                            </div>
                         </div>
 
                         <div class="form-group">
@@ -159,6 +142,12 @@
                             @if ($errors->has('image'))
                                 <span class="text-danger">{{ $errors->first('image') }}</span>
                             @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags">Tags</label>
+
+                            <x-form.input type="text" name="tags" />
                         </div>
 
 
