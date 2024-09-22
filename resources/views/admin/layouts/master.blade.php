@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>Ecommerce Dashboard @yield('page-title')</title>
 
@@ -12,10 +14,9 @@
 
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/jqvmap/dist/jqvmap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/assets/modules/summernote/summernote-bs4.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('admin/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css') }}">
+
+    <!--plugins-->
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/izitoast/css/iziToast.min.css') }}">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
@@ -56,17 +57,51 @@
     <!-- JS Libraies -->
     <script src="{{ asset('admin/assets/modules/jquery.sparkline.min.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/chart.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/modules/owlcarousel2/dist/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/modules/summernote/summernote-bs4.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('admin/assets/js/page/index.js') }}"></script>
 
+    <!--notification js -->
+    <!-- JS Libraies -->
+    <script src="{{ asset('admin/assets/modules/izitoast/js/iziToast.min.js') }}"></script>
+
+    <!-- Page Specific JS File -->
+    <script src="{{ asset('admin/assets/js/page/modules-toastr.js') }}"></script>
+
+
     <!-- Template JS File -->
     <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
 
+    <script>
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                round_error_noti("{{ $error }}")
+            @endforeach
+        @endif
+
+        @if (Session::has('message'))
+            var type = "{{ Session::get('alert-type', 'info') }}"
+            switch (type) {
+                case 'info':
+                    round_info_noti(" {{ Session::get('message') }} ")
+                    break;
+
+                case 'success':
+                    round_success_noti(" {{ Session::get('message') }} ")
+                    break;
+
+                case 'warning':
+                    round_warning_noti(" {{ Session::get('message') }} ")
+                    break;
+
+                case 'error':
+                    round_error_noti(" {{ Session::get('message') }} ")
+                    break;
+            }
+        @endif
+    </script>
     @stack('scripts')
 </body>
 

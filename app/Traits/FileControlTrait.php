@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Store;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -10,45 +11,45 @@ use Illuminate\Support\Facades\Storage;
 trait FileControlTrait
 {
 
-    public function uploadFile(UploadedFile $file, string $directory): ?string
+    public function uploadFile(UploadedFile $file, string $directory, string $disk = 'public'): ?string
     {
-        if ($file) {
-            try {
-                // Generate a unique file name with hash
-                $fileName = $file->hashName();
+        $this->validateFile($file);
 
-                // Store the file in the specified directory and return the path
-                $path = $file->storeAs($directory, $fileName, ['disk' => 'public']);
-
-                return $path;
-            } catch (Exception $e) {
-                // Log the error for debugging
-                Log::error('File upload failed: ' . $e->getMessage());
-
-                return null;
+        try {
+            if ($file) {
+                $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs($directory, $filename, $disk);
+                return $filePath;
             }
+            return null;
+        } catch (\Exception $e) {
+            Log::error('File upload failed: ' . $e->getMessage());
+            throw new \Exception('File upload failed');
         }
-
-        return null;
     }
 
-    public function deleteFile(?string $filePath): void
+    public function deleteFile(?string $filePath, string $disk = 'public'): bool
     {
-        if ($filePath) {
-            try {
-                $fullPath = 'public/' . $filePath;
-                // check if the file exists before attempting deletion
-                if (Storage::exists($fullPath)) {
-                    // Delete The file from storage
-                    Storage::delete($fullPath);
-                } else {
-                    // Log if the file does not exist
-                    Log::warning('File deletion attempted, but file not found: ' . $fullPath);
-                }
-            } catch (Exception $e) {
-                // Log the exception details if the deletion fails
-                Log::error('File deletion failed: ' . $e->getMessage());
+        try {
+            if ($filePath && Storage::disk($disk)->exists($filePath)) {
+                return Storage::disk($disk)->delete($filePath);
             }
+        } catch (\Exception $e) {
+            Log::error('File deletion failed: ' . $e->getMessage());
+            throw new \Exception('File deletion failed');
+        }
+
+        return false;
+    }
+
+    protected function validateFile(UploadedFile $file): void
+    {
+        if (!in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
+            throw new \Exception('Invalid file type. Only JPEG, PNG, and GIF are allowed.');
+        }
+
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            throw new \Exception('File size exceeds the maximum allowed size of 5MB.');
         }
     }
 }

@@ -108,8 +108,7 @@
                                                 </td>
 
                                                 <td>
-                                                    <a href="{{ route('dashboard.categories.edit', $category->id) }}"
-                                                        class="btn btn-primary">
+                                                    <a href="#" class="btn btn-primary">
                                                         <i class="far fa-edit"></i>
                                                     </a>
 

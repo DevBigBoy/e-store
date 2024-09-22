@@ -68,7 +68,9 @@
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-striped">
+
                                     <thead>
+
                                         <tr>
                                             <th>
                                                 ID
@@ -77,7 +79,6 @@
                                             <th>Name (Arabic)</th>
                                             <th>Parent</th>
                                             <th>Iamge</th>
-                                            <th>H.m Products</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -96,20 +97,23 @@
 
                                                 <td>{{ $category->parent->name_en }}</td>
 
+
+
                                                 <td>
-                                                    <img src="{{ asset('storage/' . $category->image) }}" alt=""
-                                                        width="100px">
+
+                                                    <img alt="image" src="assets/img/avatar/avatar-1.png"
+                                                        class="rounded-circle" width="35" data-toggle="tooltip"
+                                                        title="Rizal Fakhri">
                                                 </td>
 
-                                                <td>{{ $category->products_count }}</td>
+                                                <td>2018-01-29</td>
 
                                                 <td>
                                                     <div class="badge badge-success">{{ $category->status }}</div>
                                                 </td>
 
                                                 <td>
-                                                    <a href="{{ route('dashboard.categories.edit', $category->id) }}"
-                                                        class="btn btn-primary">
+                                                    <a href="#" class="btn btn-primary">
                                                         <i class="far fa-edit"></i>
                                                     </a>
 
@@ -119,9 +123,6 @@
                                                 </td>
                                             </tr>
                                         @empty
-                                            <td>
-                                                No Available data in this table
-                                            </td>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -136,6 +137,8 @@
             </div>
         </div>
     </section>
+
+
 @endsection
 
 

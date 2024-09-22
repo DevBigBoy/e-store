@@ -13,8 +13,7 @@ class CategoryObserver
     public function creating(Category $category)
     {
         if (empty($category->slug)) {
-            // Generate a slug from the category's name
-            $category->slug = Str::slug($category->name);
+            $category->slug = Str::slug($category->name_en);
         }
     }
     /**
@@ -25,6 +24,13 @@ class CategoryObserver
         //
     }
 
+
+    public function updating(Category $category)
+    {
+        if ($category->isDirty('name_en')) {
+            $category->slug = Str::slug($category->name);
+        }
+    }
     /**
      * Handle the Category "updated" event.
      */
