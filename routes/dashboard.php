@@ -24,5 +24,9 @@ Route::group([
     Route::resource('/categories', CategoryContoller::class);
 
 
+    /** Products Routes */
+    Route::get('/products/trash', [ProductController::class, 'trash'])->name('products.trash');
+    Route::put('/products/{product}/restore', [ProductController::class, 'restore'])->name('products.restore');
+    Route::delete('products/{product}/force-delete', [ProductController::class, 'forceDelete'])->name('products.forcedelete');
     Route::resource('products', ProductController::class);
 });

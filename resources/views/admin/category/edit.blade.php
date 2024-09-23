@@ -39,6 +39,7 @@
                                                 width="400px" height="300px">
                                         </div>
                                     @endif
+
                                     @error('image')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -50,7 +51,7 @@
                                     <div class="form-group col-md-6">
                                         <label>Name (English)</label>
                                         <input type="text" class="form-control" name="name_en"
-                                            value="{{ old('name_ar', $category->name_en) }}">
+                                            value="{{ old('name_en', $category->name_en) }}">
                                         @error('name_en')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -73,9 +74,7 @@
                                 <div class="form-group">
                                     <label>Description</label>
 
-                                    <textarea class="form-control" name="description">
-                                        {{ $category->description }}
-                                    </textarea>
+                                    <textarea class="form-control" name="description">{{ $category->description }}</textarea>
 
                                     @error('description')
                                         <div class="invalid-feedback">
@@ -89,12 +88,12 @@
                                         <label>Category</label>
                                         <select name="parent_id" class="form-control">
 
-                                            <option selected value="">{{ $category->name_en }} -
-                                                {{ $category->name_ar }}
+                                            <option value="">Primary Category
                                             </option>
 
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name_en }} -
+                                            @foreach ($parents as $parent)
+                                                <option value="{{ $category->id }}" @selected($category->parent_id == $parent->id)>
+                                                    {{ $category->name_en }} -
                                                     {{ $category->name_ar }}</option>
                                             @endforeach
                                         </select>
@@ -107,15 +106,15 @@
 
                                     <div class="form-group col-md-6 mb-0">
                                         <label>status</label>
-                                        <select name="status" class="form-control">
-                                            <option @selected($category->status == 'active') value="active">Active</option>
-                                            <option @selected($category->status == 'archived') value="archived">archived</option>
+                                        <select class="form-control" name="status">
+                                            <option value="active" @selected($category->status == 'active')>Active
+                                            </option>
+                                            <option value="archived" @selected($category->status == 'archived')>Archived</option>
                                         </select>
-                                        @error('status')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+
+                                        @if ($errors->has('status'))
+                                            <span class="text-danger">{{ $errors->first('status') }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

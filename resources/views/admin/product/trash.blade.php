@@ -1,22 +1,21 @@
 @extends('admin.layouts.master')
 
-@section('page-title', 'Trash category')
+@section('page-title', 'Trash Products')
 
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Trash Category</h1>
+            <h1>Product</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active">
                     <a href="{{ route('dashboard') }}">Dashboard</a>
                 </div>
                 <div class="breadcrumb-item">
-                    <a href="{{ route('dashboard.categories.index') }}">Category</a>
+                    <a href="{{ route('dashboard.products.index') }}">Product</a>
                 </div>
                 <div class="breadcrumb-item">Trashed</div>
             </div>
         </div>
-
 
         <div class="section-body">
 
@@ -28,77 +27,77 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                ID
-                                            </th>
+                                            <th>ID </th>
                                             <th>Name (English)</th>
-                                            <th>Name (Arabic)</th>
-                                            <th>Parent</th>
+                                            <th>Store Name</th>
+                                            <th>Category Name</th>
                                             <th>Iamge</th>
-                                            <th>H.m Products</th>
+                                            <th>Price</th>
+                                            <th>DisCount price</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @forelse ($categories as $key=> $category)
+                                        @forelse ($products as $key=> $product)
                                             <tr>
                                                 <td class="p-0 text-center">
                                                     {{ $key + 1 }}
                                                 </td>
 
-                                                <td>{{ $category->name_en }}</td>
+                                                <td>{{ $product->name }}</td>
 
-                                                <td>{{ $category->name_ar }}</td>
+                                                <td>{{ $product->store->name }}</td>
 
-                                                <td>{{ $category->parent->name_en }}</td>
+                                                <td>{{ $product->category->name_en }}</td>
 
                                                 <td>
-                                                    <img src="{{ asset('storage/' . $category->image) }}" alt=""
+                                                    <img src="{{ asset('storage/' . $product->image) }}" alt=""
                                                         width="100px">
                                                 </td>
 
-                                                <td>{{ $category->products_count }}</td>
+                                                <td>{{ $product->price }}</td>
+                                                <td>{{ $product->compare_price }}</td>
 
                                                 <td>
-                                                    @if ($category->status == 'active')
-                                                        <div class="badge badge-success">{{ $category->status }}</div>
+                                                    @if ($product->status == 'active')
+                                                        <div class="badge badge-success">Active</div>
+                                                    @elseif ($product->status == 'draft')
+                                                        <div class="badge badge-warning">Active</div>
                                                     @else
-                                                        <div class="badge badge-danger">{{ $category->status }}</div>
+                                                        <div class="badge badge-danger">Archived</div>
                                                     @endif
                                                 </td>
 
-                                                <td>
-                                                    <form
-                                                        action="{{ route('dashboard.categories.restore', $category->id) }}"
+                                                <td style="width: 200px">
+                                                    <form action="{{ route('dashboard.products.restore', $product->id) }}"
                                                         method="post" class="d-inline-block">
                                                         @csrf
-                                                        <!-- Form Method Spofing -->
-                                                        @method('PUT')
-                                                        <a href="{{ route('dashboard.categories.restore', $category->id) }}"
-                                                            class="btn btn-warning"
+                                                        @method('Put')
+                                                        <a href="{{ route('dashboard.products.restore', $product->id) }}"
+                                                            class="btn btn-success "
                                                             onclick="event.preventDefault(); this.closest('form').submit();">
-                                                            Restore
+                                                            <i class="fas fa-trash-alt"></i> Restore
                                                         </a>
                                                     </form>
 
                                                     <form
-                                                        action="{{ route('dashboard.categories.forcedelete', $category->id) }}"
+                                                        action="{{ route('dashboard.products.forcedelete', $product->id) }}"
                                                         method="post" class="d-inline-block">
                                                         @csrf
-                                                        <!-- Form Method Spofing -->
                                                         @method('DELETE')
-                                                        <a href="{{ route('dashboard.categories.forcedelete', $category->id) }}"
+                                                        <a href="{{ route('dashboard.products.forcedelete', $product->id) }}"
                                                             class="btn btn-danger "
                                                             onclick="event.preventDefault(); this.closest('form').submit();">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </a>
                                                     </form>
+
                                                 </td>
                                             </tr>
                                         @empty
-                                            <td colspan="8"
+                                            <td colspan="9"
                                                 class="text-center text-capitalize font-weight-bold lead bg-secondary">
                                                 No Available data in this table
                                             </td>
@@ -107,7 +106,7 @@
                                 </table>
 
                                 <div class="d-flex justify-content-center">
-                                    {{ $categories->links() }}
+                                    {{ $products->links() }}
                                 </div>
                             </div>
                         </div>

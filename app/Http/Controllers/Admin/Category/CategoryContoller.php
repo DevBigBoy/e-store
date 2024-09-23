@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin\Category;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Traits\FileControlTrait;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\CategoryStoreRequest;
 use App\Http\Requests\Admin\Category\CategoryUpdateRequest;
-use App\Traits\FileControlTrait;
 
 class CategoryContoller extends Controller
 {
@@ -81,7 +82,7 @@ class CategoryContoller extends Controller
      */
     public function edit(Category $category)
     {
-        $categories = Category::select([
+        $parents = Category::select([
             'id',
             'name_en',
             'name_ar',
@@ -93,7 +94,9 @@ class CategoryContoller extends Controller
                     ->Orwhere('parent_id', '<>', $category->id);
             })
             ->get();
-        return view('admin.category.edit', compact('category', 'categories'));
+
+        // dd($category->status);
+        return view('admin.category.edit', compact('category', 'parents'));
     }
 
     /**
@@ -129,8 +132,57 @@ class CategoryContoller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $category->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+
+        $notification = [
+            'message' => 'Category Deleted successfully!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('dashboard.categories.index')->with($notification);
+    }
+
+    public function trash()
+    {
+        $categories =  Category::onlyTrashed()->paginate(5);
+        return view('admin.category.trash', compact('categories'));
+    }
+
+    public function restore(string $id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+
+        $notification = [
+            'message' => 'Category Restored successfully!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('dashboard.categories.index')->with($notification);
+    }
+
+    public function forceDelete(string $id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->forceDelete();
+
+        if ($category->image) {
+            $this->deleteFile($category->image);
+        }
+
+        $notification = [
+            'message' => 'Category Completely Deleted successfully!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('dashboard.categories.index')->with($notification);
     }
 }

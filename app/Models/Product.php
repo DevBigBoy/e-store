@@ -3,17 +3,36 @@
 namespace App\Models;
 
 use App\Models\Scopes\StoreScope;
+use App\Observers\ProductObserver;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
-#[ScopedBy([StoreScope::class])]
-
+// #[ScopedBy([StoreScope::class])]
+#[ObservedBy([ProductObserver::class])]
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    // $table->id();
+    // $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
+    // $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+    // $table->string('name');
+    // $table->string('slug')->unique();
+    // $table->text('description')->nullable();
+    // $table->string('image')->nullable();
+    // $table->float('price')->default(0);
+    // $table->float('compare_price')->nullable();
+    // $table->json('options')->nullable();
+    // $table->float('rating')->default(0);
+    // $table->boolean('featured')->default(0);
+    // $table->enum('status', ['active', 'draft', 'archvied'])->default('active');
+    // $table->timestamps();
+    // $table->softDeletes();
 
     protected $fillable = [
         'store_id',
@@ -27,7 +46,7 @@ class Product extends Model
         'options',
         'rating',
         'featured',
-        'status',
+        'status', //['active', 'draft', 'archvied']
     ];
 
     protected $casts = [

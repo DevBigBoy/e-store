@@ -28,6 +28,9 @@
                     <li class="{{ request()->routeIs('dashboard.categories.create') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('dashboard.categories.create') }}">Create</a>
                     </li>
+                    <li class="{{ request()->routeIs('dashboard.categories.trash') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('dashboard.categories.trash') }}">Trash</a>
+                    </li>
                 </ul>
             </li>
 
@@ -39,7 +42,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{{ route('dashboard.products.index') }}">All</a></li>
                     <li><a class="nav-link" href="{{ route('dashboard.products.create') }}">Create</a></li>
-
+                    <li><a class="nav-link" href="{{ route('dashboard.products.trash') }}">Trash</a></li>
                 </ul>
             </li>
             <li class="menu-header">Stisla</li>

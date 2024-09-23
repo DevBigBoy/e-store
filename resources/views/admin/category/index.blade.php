@@ -104,7 +104,11 @@
                                                 <td>{{ $category->products_count }}</td>
 
                                                 <td>
-                                                    <div class="badge badge-success">{{ $category->status }}</div>
+                                                    @if ($category->status == 'active')
+                                                        <div class="badge badge-success">{{ $category->status }}</div>
+                                                    @else
+                                                        <div class="badge badge-danger">{{ $category->status }}</div>
+                                                    @endif
                                                 </td>
 
                                                 <td>
@@ -113,13 +117,24 @@
                                                         <i class="far fa-edit"></i>
                                                     </a>
 
-                                                    <a href="#" class="btn btn-danger">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </a>
+                                                    <form
+                                                        action="{{ route('dashboard.categories.destroy', $category->id) }}"
+                                                        method="post" class="d-inline-block">
+                                                        @csrf
+                                                        <!-- Form Method Spofing -->
+                                                        @method('DELETE')
+                                                        <a href="{{ route('dashboard.categories.destroy', $category->id) }}"
+                                                            class="btn btn-danger "
+                                                            onclick="event.preventDefault(); this.closest('form').submit();">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    </form>
+
                                                 </td>
                                             </tr>
                                         @empty
-                                            <td>
+                                            <td colspan="8"
+                                                class="text-center text-capitalize font-weight-bold lead bg-secondary">
                                                 No Available data in this table
                                             </td>
                                         @endforelse
