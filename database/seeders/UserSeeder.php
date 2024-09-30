@@ -18,17 +18,17 @@ class UserSeeder extends Seeder
         // With Model
         User::create([
             'name' => 'Ali Nabih',
-            'email' => 'alinabih@gmail.com',
-            'phone_number' => '0100575755',
-            'password' => Hash::make('shezo123'),
+            'email' => 'admin@gmail.com',
+            'phone' => '01007575755',
+            'password' => Hash::make('123456789'),
         ]);
 
 
         // With Query Builder
         DB::table('users')->insert([
             'name' => 'sara nour',
-            'email' => 'saranour@gmail.com',
-            'phone_number' => '0107575755',
+            'email' => 'user@gmail.com',
+            'phone' => '0107575755',
             'password' => Hash::make('shezo123'),
         ]);
     }

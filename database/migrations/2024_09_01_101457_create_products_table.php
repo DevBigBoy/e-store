@@ -13,20 +13,33 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
-            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->text('description')->nullable();
+
+            $table->foreignId('category_id')
+                ->nullable()
+                ->constrained('categories')
+                ->nullOnDelete();
+
+            $table->string('title', 255);
+            $table->string('slug', 255)->unique();
+
+            $table->text('short_description')->nullable();
             $table->string('image')->nullable();
-            $table->float('price')->default(0);
-            $table->float('compare_price')->nullable();
-            $table->json('options')->nullable();
-            $table->float('rating')->default(0);
-            $table->boolean('featured')->default(0);
-            $table->enum('status', ['active', 'draft', 'archvied'])->default('active');
-            $table->timestamps();
+
+            $table->decimal('price', 10, 2)->default(0);
+            $table->decimal('compare_price', 10, 2)->nullable();
+
+
+            $table->enum('status', ['active', 'out_of_stock'])->default('active');
+
+            // Inventory Management
+            $table->integer('stock_quantity')->default(0);  // Track product stock
+            $table->boolean('is_in_stock')->default(true);  // Flag to quickly check if the product is in stock
+
+            $table->boolean('is_featured')->default(false);  // Flag for featured products
+            $table->boolean('is_on_sale')->default(false);    // Flag for products on sale
+
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

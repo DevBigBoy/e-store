@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\Store;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;

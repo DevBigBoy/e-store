@@ -13,12 +13,23 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+
+            $table->string('shop_name_en')->unique();
+            $table->string('shop_name_ar')->nullable()->unique();
+
             $table->string('slug')->unique();
+
+            $table->string('email')->nullable()->unique();
+            $table->string('phone')->nullable()->unique();
+
             $table->text('description')->nullable();
+            $table->string('address')->nullable();
+
             $table->string('logo_image')->nullable();
             $table->string('cover_image')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
+
+            $table->enum('status', ['active', 'suspended'])->default('active');
             $table->timestamps();
         });
     }
