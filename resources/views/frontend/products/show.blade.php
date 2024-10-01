@@ -1,12 +1,6 @@
-<x-front-layout title="product details">
+<x-front-layout :title="$product->name">
 
-
-
-
-
-    <!--==========================
-        PRODUCT  REPORT MODAL VIEW
-        ===========================-->
+    <!--==========================    PRODUCT  REPORT MODAL VIEW  ===========================-->
     <section class="product_popup_modal report_modal">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -50,9 +44,7 @@
             </div>
         </div>
     </section>
-    <!--==========================
-        PRODUCT REPORT MODAL VIEW
-        ===========================-->
+    <!--==========================  PRODUCT REPORT MODAL VIEW  ===========================-->
 
 
     <!--==========================
@@ -207,9 +199,7 @@
             </div>
         </div>
     </section>
-    <!--==========================
-          PRODUCT MODAL VIEW END
-        ===========================-->
+    <!--==========================    PRODUCT MODAL VIEW END  ===========================-->
 
 
     <!--============================

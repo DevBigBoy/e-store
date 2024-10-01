@@ -8,6 +8,11 @@
 
 -   **Laravel**: The PHP framework used for building the API.
 -   **MySQL**: Database management system.
+-   **MySQL**: Database management system.
+
+## 📜 Packages Used
+
+-   **laravel-sluggable**: Generate slugs when saving Eloquent models
 
 ## 🗂 Database Schema
 

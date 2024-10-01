@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Models\Scopes\StoreScope;
 use App\Observers\ProductObserver;
@@ -56,6 +57,8 @@ class Product extends Model
         $builder->where('status', '=', 'active');
     }
 
+    public function scopeFilter(Builder $builder, $filters) {}
+
     protected $casts = [
         'options' => 'json',  // Cast options to JSON
     ];
@@ -85,6 +88,26 @@ class Product extends Model
 
         // For internally stored images, return the public URL
         return Storage::url($this->image);  // This ensures compatibility with various storage drivers
+    }
+
+    public function getSalePercentAttribute()
+    {
+        // Check if compare_price is missing or invalid
+        if (!$this->compare_price || $this->compare_price <= 0 || $this->price <= 0) {
+            return 0;
+        }
+
+        // Calculate sale percentage
+        $salePercent = 100 - (100 * $this->price / $this->compare_price);
+
+        // Ensure the result is rounded to 2 decimal places and is not negative
+        return round(max($salePercent, 0), 2);
+    }
+
+    public function getIsNewAttribute()
+    {
+        // Check if the product was created within the last 30 days
+        return $this->created_at && $this->created_at->gt(Carbon::now()->subDays(30));
     }
 
     public function tags()

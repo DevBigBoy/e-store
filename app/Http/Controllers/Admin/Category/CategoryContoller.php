@@ -166,7 +166,7 @@ class CategoryContoller extends Controller
             'alert-type' => 'success'
         ];
 
-        return redirect()->route('dashboard.categories.index')->with($notification);
+        return redirect()->route('dashboard.categories.trash')->with($notification);
     }
 
     public function forceDelete(string $id)
@@ -183,6 +183,6 @@ class CategoryContoller extends Controller
             'alert-type' => 'success'
         ];
 
-        return redirect()->route('dashboard.categories.index')->with($notification);
+        return redirect()->route('dashboard.categories.trash')->with($notification);
     }
 }
