@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <!-- <link rel="stylesheet" href="css/rtl.css"> -->
+    @stack('styles')
+
 </head>
 
 <body>
@@ -663,8 +665,9 @@
     <script src="{{ asset('frontend/js/jquery.classycountdown.js') }}"></script>
 
     <!--main/custom js-->
-    <script src="js/main.js"></script>
+    <script src="{{ asset('frontend/js/main.js') }}"></script>
 
+    @stack('scripts')
 </body>
 
 </html>

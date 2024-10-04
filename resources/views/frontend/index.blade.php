@@ -4,6 +4,7 @@
     <x-slot:slot>
         @include('frontend.home.slider')
 
+        @include('frontend.home.sell')
 
         @include('frontend.home.hote-deals')
 

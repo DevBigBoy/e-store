@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use App\Models\Scopes\StoreScope;
 use App\Observers\ProductObserver;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -49,6 +51,11 @@ class Product extends Model
         'status', //['active', 'draft', 'archvied']
     ];
 
+    public function scopeActive(Builder $builder)
+    {
+        $builder->where('status', '=', 'active');
+    }
+
     protected $casts = [
         'options' => 'json',  // Cast options to JSON
     ];
@@ -63,6 +70,22 @@ class Product extends Model
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
 
+
+    public function getImageUrlAttribute()
+    {
+        // Check if the image does not exist, return a default image URL or an empty string
+        if (!$this->image) {
+            return asset('images/default.png');  // Change 'images/default.png' to your actual default image path
+        }
+
+        // Check if the image is from an external resource, return it without modification
+        if (Str::startsWith($this->image, ['http://', 'https://'])) {
+            return $this->image;
+        }
+
+        // For internally stored images, return the public URL
+        return Storage::url($this->image);  // This ensures compatibility with various storage drivers
+    }
 
     public function tags()
     {

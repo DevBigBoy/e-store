@@ -6,8 +6,15 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Frontend\Home\HomeController;
 
 
-Route::get('/', HomeController::class)->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/cart', function () {
+    return  view('frontend.pages.cart');
+});
+
+Route::get('/product-details/{id}', function () {
+    return  view('frontend.pages.product-details');
+});
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
