@@ -4,6 +4,7 @@
 /public/hot
 /public/admin
 /resources/views/admin/project
+/resources/views/frontend/web
 /public/storage
 /public/plugins
 /public/dist
