@@ -1,4 +1,4 @@
-<x-front-layout title="Shezo Computers Store">
+<x-front-layout title="Shezo Computers Store" :categories="$categories">
 
 
     <x-slot:slot>

@@ -2,25 +2,27 @@
 
 namespace App\Models;
 
+use Spatie\Sluggable\SlugOptions;
 use App\Observers\CategoryObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Sluggable\HasSlug;
 
-#[ObservedBy([CategoryObserver::class])]
+// #[ObservedBy([CategoryObserver::class])]
+
 class Category extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasSlug;
 
     protected $fillable = [
-        'name_en',
-        'name_ar',
+        'parent_id',
+        'name',
         'slug',
         'description',
-        'parent_id',
         'image',
+        'icon',
         'status',
     ];
 
@@ -72,5 +74,12 @@ class Category extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
 }

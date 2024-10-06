@@ -51,10 +51,14 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary col-md-1">Search</button>
+                <button type="submit" class="btn btn-primary col-md-1 mr-2">Search</button>
+
+
                 @if (request()->hasAny(['name_en', 'name_ar', 'status', 'category']))
                     <a href="{{ route('dashboard.categories.index') }}" class="btn btn-danger col-md-1 ml-2">Clear</a>
                 @endif
+
+                <a href="{{ route('dashboard.categories.create') }}" class="btn btn-primary">create</a>
             </form>
 
 
@@ -70,13 +74,10 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                ID
-                                            </th>
-                                            <th>Name (English)</th>
-                                            <th>Name (Arabic)</th>
+                                            <th> ID </th>
+                                            <th>Name</th>
                                             <th>Parent</th>
-                                            <th>Iamge</th>
+                                            <th>Icon</th>
                                             <th>H.m Products</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -86,15 +87,11 @@
                                     <tbody>
                                         @forelse ($categories as $key=> $category)
                                             <tr>
-                                                <td class="p-0 text-center">
-                                                    {{ $key + 1 }}
-                                                </td>
+                                                <td class="p-0 text-center"> {{ $key + 1 }} </td>
 
-                                                <td>{{ $category->name_en }}</td>
+                                                <td>{{ $category->name }}</td>
 
-                                                <td>{{ $category->name_ar }}</td>
-
-                                                <td>{{ $category->parent->name_en }}</td>
+                                                <td>{{ $category->parent->name ?? 'Primary' }}</td>
 
                                                 <td>
                                                     <img src="{{ asset('storage/' . $category->image) }}" alt=""
@@ -133,7 +130,7 @@
                                                 </td>
                                             </tr>
                                         @empty
-                                            <td colspan="8"
+                                            <td colspan="7"
                                                 class="text-center text-capitalize font-weight-bold lead bg-secondary">
                                                 No Available data in this table
                                             </td>

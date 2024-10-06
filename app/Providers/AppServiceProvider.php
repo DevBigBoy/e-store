@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Interfaces\Category\CategoryRepositoryInterface;
+use App\Repository\Category\CategoryRepository;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
     }
 
     /**

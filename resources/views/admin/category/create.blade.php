@@ -2,6 +2,10 @@
 
 @section('page-title', 'category')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/bootstrap-iconpicker.min.css') }}">
+@endpush
+
 @section('content')
     <section class="section">
         <div class="section-header">
@@ -23,43 +27,47 @@
                         <form action="{{ route('dashboard.categories.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
+
                             <div class="card-header">
                                 <h4>New Category</h4>
                             </div>
 
                             <div class="card-body">
 
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="image">image</label>
+                                        <input type="file" class="form-control-file" id="image" name="image">
+                                        @error('image')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Icon</label>
+                                        <div class="">
+
+                                            <button data-unselected-class="btn-primary" data-iconset="fontawesome5"
+                                                data-icon="fas fa-wifi" class="btn btn-primary" role="iconpicker"
+                                                name="icon"></button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
                                 <div class="form-group">
-                                    <label for="image">image</label>
-                                    <input type="file" class="form-control-file" id="image" name="image">
-                                    @error('image')
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="name">
+                                    @error('name_en')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label>Name (English)</label>
-                                        <input type="text" class="form-control" name="name_en">
-                                        @error('name_en')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Name (Arabic)</label>
-                                        <input type="text" class="form-control" name="name_ar">
-                                        @error('name_ar')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-
 
                                 <div class="form-group">
                                     <label>Description</label>
@@ -75,13 +83,15 @@
                                     <div class="form-group col-md-6 mb-0">
                                         <label>Category</label>
                                         <select name="parent_id" class="form-control">
-                                            <option value="">Choose...</option>
+                                            <option>Choose...</option>
                                             <option value="">Primary Category</option>
+
                                             @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name_en }} -
-                                                    {{ $category->name_ar }}</option>
+                                                <option value="{{ $category->id }}">
+                                                    {{ $category->name }}</option>
                                             @endforeach
                                         </select>
+
                                         @error('parent_id')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -92,7 +102,7 @@
                                     <div class="form-group col-md-6 mb-0">
                                         <label>status</label>
                                         <select name="status" class="form-control">
-                                            <option value="">Choose...</option>
+                                            <option>Choose...</option>
                                             <option value="active">Active</option>
                                             <option value="archived">archived</option>
                                         </select>
@@ -117,3 +127,8 @@
         </div>
     </section>
 @endsection
+
+
+@push('scripts')
+    <script src="{{ asset('admin/assets/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
+@endpush

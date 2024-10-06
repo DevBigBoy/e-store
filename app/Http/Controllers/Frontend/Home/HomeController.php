@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Frontend\Home;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -18,8 +19,14 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
+        $categories = Category::whereNull('parent_id')
+            ->with('children')
+            ->get();
+
+
         return view('frontend.index', [
-            'products' => $products
+            'products' => $products,
+            'categories' => $categories,
         ]);
     }
 }

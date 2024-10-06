@@ -9,27 +9,27 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\CategoryStoreRequest;
 use App\Http\Requests\Admin\Category\CategoryUpdateRequest;
+use App\Interfaces\Category\CategoryRepositoryInterface;
 
 class CategoryContoller extends Controller
 {
     use FileControlTrait;
-    /**
-     * Display a listing of the resource.
-     */
+
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
+
     public function index(Request $request)
     {
         $filters = $request->query();
 
-        $categories = Category::filter($filters)
-            ->withCount(['products as products_count' => function ($query) {
-                $query->where('status', 'active');
-            }])
-            ->with(['parent:id,name_en'])
-            ->latest()
-            ->paginate(5);
+        $categories = $this->categoryRepository->getAll($filters);
 
-        // Fetch only parent categories (parent_id is null) for the category dropdown
-        $parentCategories = Category::whereNull('parent_id')->get();
+        $parentCategories = $this->categoryRepository->getParentCategories();
 
         return view('admin.category.index', [
             'categories' => $categories,
@@ -46,13 +46,12 @@ class CategoryContoller extends Controller
         $categories = Category::select(
             [
                 'id',
-                'name_en',
-                'name_ar',
+                'name',
                 'parent_id',
             ]
         )->where('status', 'active')
             ->get();
-        // return dd($categories);
+
         return view('admin.category.create', compact('categories'));
     }
 
